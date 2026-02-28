@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>LUMIÈRE STUDIO</title>
+
 <style>
 body {
     margin: 0;
@@ -15,7 +17,7 @@ body {
 /* Hero image */
 .hero {
     width: 100%;
-    height: 400px; /* możesz zmienić wysokość */
+    height: 400px;
     background-image: url('images/1.png');
     background-size: cover;
     background-position: center;
@@ -26,10 +28,9 @@ body {
     text-shadow: 1px 1px 8px rgba(0,0,0,0.7);
 }
 
-/* Nagłówek i slogan na górze strony */
 header {
     text-align: center;
-    padding: 40px 20px 20px;
+    padding: 20px;
 }
 
 header h1 {
@@ -95,14 +96,61 @@ footer {
     font-size: 12px;
     color: #777;
 }
+
+/* LIGHTBOX */
+#lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+#lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+#lightbox .close,
+#lightbox .prev,
+#lightbox .next {
+    position: absolute;
+    color: white;
+    font-size: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    user-select: none;
+}
+
+#lightbox .close {
+    top: 20px;
+    right: 20px;
+    transform: none;
+    font-size: 2.5rem;
+}
+
+#lightbox .prev { left: 20px; }
+#lightbox .next { right: 20px; }
+
+#lightbox.hidden { display: none; }
 </style>
 </head>
-
 <body>
 
 <!-- HERO IMAGE -->
 <div class="hero">
-    <h1></h1>
+    <h1>LUMIÈRE STUDIO</h1>
 </div>
 
 <header>
@@ -120,7 +168,7 @@ footer {
     <!-- PORTRETY -->
     <img src="images/sesje/marina3.png" class="filter portret">
     
-    <!-- MODA -->
+    <!-- SESJE -->
     <img src="images/sesje/dahlia3.png" class="filter sesje">
     <img src="images/sesje/studio4.png" class="filter sesje">
     <img src="images/sesje/marina8.png" class="filter sesje">
@@ -134,14 +182,22 @@ footer {
     <img src="images/sesje/SigmaRemi.png" class="filter plener">
     <img src="images/sesje/MedalTVGrandTheftAutoV20260222212606192.png" class="filter plener">
     <img src="images/sesje/furki.png" class="filter plener">
-
 </div>
 
 <footer>
     © 2026 LUMIÈRE STUDIO
 </footer>
 
+<!-- LIGHTBOX -->
+<div id="lightbox" class="hidden">
+    <span class="close" onclick="closeLightbox(event)">&times;</span>
+    <span class="prev" onclick="changeSlide(-1,event)">&#10094;</span>
+    <span class="next" onclick="changeSlide(1,event)">&#10095;</span>
+    <img id="lightbox-img" src="">
+</div>
+
 <script>
+// FILTR GALLERY
 function filterSelection(category) {
     let images = document.getElementsByClassName("filter");
     let buttons = document.querySelectorAll("nav button");
@@ -150,17 +206,45 @@ function filterSelection(category) {
     event.target.classList.add("active");
 
     if (category === "all") {
-        for (let i = 0; i < images.length; i++) {
-            images[i].classList.remove("hidden");
-        }
+        for (let i = 0; i < images.length; i++) images[i].classList.remove("hidden");
     } else {
         for (let i = 0; i < images.length; i++) {
             images[i].classList.add("hidden");
-            if (images[i].classList.contains(category)) {
-                images[i].classList.remove("hidden");
-            }
+            if (images[i].classList.contains(category)) images[i].classList.remove("hidden");
         }
     }
+}
+
+// LIGHTBOX
+let galleryImages = document.querySelectorAll('.gallery img');
+let currentIndex = 0;
+
+galleryImages.forEach((img, index) => {
+    img.addEventListener('click', () => {
+        if(img.classList.contains('nozoom')) return; // wyłączenie zoom dla tego img
+        currentIndex = index;
+        openLightbox(img.src);
+    });
+});
+
+function openLightbox(src) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    lightboxImg.src = src;
+    lightbox.classList.remove('hidden');
+}
+
+function closeLightbox(event) {
+    event.stopPropagation();
+    document.getElementById('lightbox').classList.add('hidden');
+}
+
+function changeSlide(step, event) {
+    event.stopPropagation();
+    currentIndex += step;
+    if (currentIndex < 0) currentIndex = galleryImages.length -1;
+    if (currentIndex >= galleryImages.length) currentIndex = 0;
+    document.getElementById('lightbox-img').src = galleryImages[currentIndex].src;
 }
 </script>
 
