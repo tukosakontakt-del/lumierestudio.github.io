@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMIÈRE STUDIO</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0e0e0e;
+    color: #f5f5f5;
+}
+
+header {
+    text-align: center;
+    padding: 60px 20px 30px;
+}
+
+header h1 {
+    font-size: 42px;
+    letter-spacing: 6px;
+    margin: 0;
+}
+
+header p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #aaa;
+    letter-spacing: 2px;
+}
+
+nav {
+    text-align: center;
+    margin: 30px 0;
+}
+
+nav button {
+    background: none;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+nav button:hover,
+nav button.active {
+    background: #fff;
+    color: #000;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    padding: 20px 40px 60px;
+}
+
+.gallery img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.gallery img:hover {
+    transform: scale(1.03);
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    text-align: center;
+    padding: 40px;
+    font-size: 12px;
+    color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>LUMIÈRE STUDIO</h1>
+    <p>Where light builds identity</p>
+</header>
+
+<nav>
+    <button class="active" onclick="filterSelection('all')">Wszystkie</button>
+    <button onclick="filterSelection('portret')">Portrety</button>
+    <button onclick="filterSelection('plener')">Plener</button>
+    <button onclick="filterSelection('moda')">Moda</button>
+</nav>
+
+<div class="gallery">
+    <!-- PORTRETY -->
+    <img src="images/portrety/1.jpg" class="filter portret">
+    <img src="images/portrety/2.jpg" class="filter portret">
+
+    <!-- PLENER -->
+    <img src="images/plener/1.jpg" class="filter plener">
+    <img src="images/plener/2.jpg" class="filter plener">
+
+    <!-- MODA -->
+    <img src="images/moda/1.jpg" class="filter moda">
+    <img src="images/moda/2.jpg" class="filter moda">
+</div>
+
+<footer>
+    © 2026 LUMIÈRE STUDIO
+</footer>
+
+<script>
+function filterSelection(category) {
+    let images = document.getElementsByClassName("filter");
+    let buttons = document.querySelectorAll("nav button");
+
+    buttons.forEach(btn => btn.classList.remove("active"));
+    event.target.classList.add("active");
+
+    if (category === "all") {
+        for (let i = 0; i < images.length; i++) {
+            images[i].classList.remove("hidden");
+        }
+    } else {
+        for (let i = 0; i < images.length; i++) {
+            images[i].classList.add("hidden");
+            if (images[i].classList.contains(category)) {
+                images[i].classList.remove("hidden");
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>
